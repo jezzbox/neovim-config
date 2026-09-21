@@ -27,6 +27,9 @@ require("lazy").setup({
   },
   install = { colorscheme = { "kanagawa" } },
   checker = { enabled = true }, -- automatically check for plugin updates
+  -- no plugins here require luarocks; skips the hererocks bootstrap
+  -- and its :checkhealth lazy error
+  rocks = { enabled = false },
   performance = {
     rtp = {
       -- disable some rtp plugins
