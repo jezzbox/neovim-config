@@ -12,7 +12,9 @@ vim.cmd("colorscheme kanagawa-dragon")
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
-    local params = vim.lsp.util.make_range_params()
+    local client = vim.lsp.get_clients({ bufnr = 0, name = 'gopls' })[1]
+    if not client then return end
+    local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
     params.context = {only = {"source.organizeImports"}}
     -- buf_request_sync defaults to a 1000ms timeout. Depending on your
     -- machine and codebase, you may want longer. Add an additional
@@ -31,7 +33,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({async = false})
   end
 })
-
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
